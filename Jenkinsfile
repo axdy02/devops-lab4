@@ -2,6 +2,21 @@ pipeline {
     agent any
 
     stages {
+	stage('Secure Secret Management') {
+    steps {
+        withCredentials([
+            string(credentialsId: 'lab4-api-key', variable: 'API_KEY')
+        ]) {
+            sh '''
+                set +x
+                test -n "$API_KEY"
+                echo "API credential loaded securely"
+                echo "Secret validation successful"
+            '''
+        }
+    }
+}
+	
         stage('Checkout') {
             steps {
                 checkout scm
